@@ -16,9 +16,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
       res.status(400).send({ message: "Failed! Username is already in use!" });
       return;
     }
-
-      next();
-    });
+  });
 };
 
 checkRolesExisted = (req, res, next) => {
@@ -37,7 +35,7 @@ checkRolesExisted = (req, res, next) => {
 };
 
 const verifySignUp = {
-  checkDuplicateUsername,
+  checkDuplicateUsernameOrEmail,
   checkRolesExisted
 };
 
