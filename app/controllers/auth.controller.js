@@ -4,13 +4,14 @@ const User = db.user;
 const Role = db.role;
 
 var jwt = require("jsonwebtoken");
+var cryptoJS = require("crypto-js");
 var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
   const user = new User({
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: cryptoJS.SHA1(req.body.password)//bcrypt.hashSync(req.body.password, 8)
   });
 
   user.save((err, user) => {
@@ -77,13 +78,15 @@ exports.signin = (req, res) => {
         return res.status(404).send({ message: "User Not found." });
       }
 
-      var passwordIsValid = bcrypt.compareSync(
-        req.body.password,
-        user.password
-      );
+      var passwordIsValid = false;
+      if(cryptoJS.SHA1(req.body.password)==user.password){
+        passwordIsValid = true;
+      }
 
       if (!passwordIsValid) {
         return res.status(401).send({
+          errorreq:req.body.password,
+          errortarget:user.password,
           accessToken: null,
           message: "Invalid Password!"
         });
