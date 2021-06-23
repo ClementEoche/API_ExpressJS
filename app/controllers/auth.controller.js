@@ -79,7 +79,7 @@ exports.signin = (req, res) => {
       }
 
       var passwordIsValid = false;
-      if(cryptoJS.SHA1(req.body.password)==user.password){
+      if(req.body.password==user.password){
         passwordIsValid = true;
       }
 
